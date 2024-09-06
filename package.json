@@ -1,0 +1,17 @@
+{
+  "name": "Simple Chart APP",
+  "version": "1.0.0",
+  "description": "Line chart with random data served from Node.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
