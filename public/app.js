@@ -266,21 +266,35 @@ document.addEventListener('DOMContentLoaded', function() {
         chartController.drawChart(preparedData);
     });    
 
+    // Обработчик для кнопки "Update Data"
     document.getElementById('update-btn').addEventListener('click', async () => {
-        const url = 'https://cors-anywhere.herokuapp.com/' + document.getElementById('data-url').value;
+        // Получаем выбранный источник данных
+        const dataSource = document.getElementById('data-source').value;
+        let url;
 
-        // Обновляем URL в DataController
-        dataController.setUrl(url);
+        if (dataSource === 'anychart') {
+            url = 'http://static.anychart.com/cdn/anydata/common/11.json'; // Оригинальный AnyChart URL
+        } else {
+            url = '/data'; // Локальный URL, например, /data
+        }
 
-        // Останавливаем предыдущий процесс опроса, если он запущен
-        dataController.stopPolling();
+        // Получаем частоту обновления из поля ввода
+        const updateInterval = parseInt(document.getElementById('update-interval').value, 10) * 1000; // Переводим секунды в миллисекунды
+
+        // Если контроллер данных уже существует, останавливаем его
+        if (dataController) {
+            dataController.stopPolling();
+        }
+
+        // Создаем новый DataController с обновленными параметрами
+        dataController = new DataController(chartContainer.clientWidth, url, updateInterval);
 
         try {
-            // Выполняем начальный запрос данных сразу
+            // Выполняем первый запрос данных сразу
             const preparedData = await dataController.fetchData();
             chartController.drawChart(preparedData);
 
-            // Запускаем периодический опрос
+            // Запускаем периодический опрос данных
             dataController.startPolling((newData) => {
                 chartController.drawChart(newData);
             });
@@ -288,6 +302,8 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error("Error during data fetch:", error);
         }
     });
+
+
     // Находим контейнер для подсказки
     const tooltip = document.getElementById('tooltip');
 

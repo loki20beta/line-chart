@@ -15,7 +15,7 @@ app.get('/data', (req, res) => {
 // Функция для генерации случайных данных
 function generateRandomData() {
     const result = [];
-    const points = 10; // Количество точек на графике
+    const points = Math.floor(Math.random() * 100); // Количество точек на графике
     for (let i = 0; i < points; i++) {
         result.push({
             x: `Point ${i + 1}`,
